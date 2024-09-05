@@ -1,4 +1,4 @@
-# Continuous Delivery Structure for a Flask App using GCP App Engine
+# Project Scaffolding for a Continuous Delivery of a Flask API using GCP's App Engine
 
 ## Create and Deploy a Flask Application in Google Cloud's Environment
 
@@ -19,40 +19,72 @@ install:
 flask
 ```
 
-* **main.py**: simple Flask app in Python
+* **main.py**: simple Flask app in Python:
 
+```
+from flask import Flask
+from flask import jsonify
+app = Flask(__name__)
 
+@app.route('/')
+def hello():
+    """Return a friendly HTTP greeting."""
+    print("I am inside hello world")
+    return 'Hello World!'
 
-2. Create and activate a virtual environment:
+@app.route('/echo/<name>')
+def echo(name):
+    print(f"This was placed in the url: new-{name}")
+    val = {"new-name": name}
+    return jsonify(val)
 
-    * `virtualenv ~/.flask-cd`
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=8080, debug=True)
+```
 
-    * `source ~/.flask-cd/bin/activate`
+### Test the Python Application Locally
 
-3. Install dependencies: `make install`
+* Clone the GitHub project into your local directory. Then, create and
+activate a Python virtual environment:
 
-4. Test the Flask app by running `python main.py`
+    - `virtualenv /.flask-cd`
 
-    * Check the local host ('127.0.0.1') at port `8080`
-    to see the Flask app is working
+    - `source /.flask-cd/bin/activate`
 
-5. Create an `app.yaml` file to deploy the application in App Engine:
+* Install the dependencies: `make install`
+
+* Test the Flask app by running `python main.py`
+
+    - Check the local host ('127.0.0.1') at port `8080`
+    to see if the Flask app is working
+
+* Create an `app.yaml` file to deploy the application in App Engine:
 
 ```
 runtime: python38
 ```
 
-6. Go to GCP and create a Cloud Shell terminal. `git clone` your GitHub
-repository. Go to the repository directory
+### Set Up and Deploy the Flask API in the App Engine Service
 
-7. Deploy app in App Engine by running `gcloud app deploy`. Select a region
-and check the services to deploy. Continue and wait for it to be deployed.
+* Go to GCP and create a Cloud Shell terminal
 
-8. Test the deployed app in the url provided.
+* Clone your repository by running `git clone` and `cd` to the repo directory
 
-## Setting up Continuous Delivery using Cloud Build
+* Deploy the app in App Engine by running:
+*
+    - `gcloud app create`: to create a new service
 
-1. In your repository, create a `cloudbuild.yaml` file for CD:
+    - `gcloud app deploy`: to deploy the service by following the instructions given
+     in the `app.yaml` file
+
+* Select a region and check the services to deploy. Continue and wait for it to be
+deployed.
+
+* Test the deployed app using the URL (Endpoint) provided by App Engine
+
+## Set up Continuous Delivery using Cloud Build
+
+* In your repository, create a `cloudbuild.yaml` file for CD:
 
 ```
 steps:
@@ -63,24 +95,24 @@ options:
   logging: CLOUD_LOGGING_ONLY
 ```
 
-2. In the Cloud Console search bar, search **Cloud Build**
+* In the Cloud Console search bar, search **Cloud Build**
 
-3. Go to Triggers > Create Trigger
+* Go to Triggers > Create Trigger
 
-    * Create trigger name and description
+    - Create trigger name and description
 
-    * Event: Push to a branch
+    - Event: Push to a branch
 
-    * Source: Repository > Connect New Repository > GitHub and authenticate
+    - Source: Repository > Connect New Repository > GitHub and authenticate
     and select repository
 
-    * Source: Branch, select the branch to deploy
+    - Source: Branch, select the branch to deploy
 
-    * Service account: select the App Engine service account
+    - Service account: select the App Engine service account
 
-    * Create
+    - Create
 
-4. Go to Settings > Service Account and enable App Engine and Service Account
+* Go to Settings > Service Account and enable App Engine and Service Account
 GCP services.
 
-5. Make a change to your repo and push to see the build in History
+* Make a change to your repo and push to see the build in History
