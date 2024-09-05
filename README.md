@@ -1,25 +1,27 @@
 # Continuous Delivery Structure for a Flask App using GCP App Engine
 
-## Creating and Deploying a Flask App in App Engine
+## Create and Deploy a Flask Application in Google Cloud's Environment
 
-Process steps:
+### Project Scaffold
 
-1. Create a project repository in GitHub and add the structure files:
+Create a project repository in GitHub and add the following files:
 
-    * `Makefile`: to build the application
+* **Makefile**: to build the application steps:
 
-    ```
-    install:
-	    pip install -r requirements.txt
-    ```
+```
+install:
+    pip install -r requirements.txt
+```
 
-    * `requirements.txt`: file with the required dependencies
+* **requirements.txt**: file with the required Python dependencies:
 
-    ```
-    flask
-    ```
+```
+flask
+```
 
-    * `main.py`: simple Flask app in Python
+* **main.py**: simple Flask app in Python
+
+
 
 2. Create and activate a virtual environment:
 
